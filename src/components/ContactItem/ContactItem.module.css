@@ -1,0 +1,36 @@
+.listItem {
+    padding: 5px 0;
+    padding-left: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative; 
+  }
+  
+  .listItem::before {
+    content: ''; 
+    width: 10px; 
+    height: 10px; 
+    position: absolute;
+    left: 5px; 
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: black; 
+    border-radius: 50%; 
+  }
+  
+  .deleteButton {
+    padding: 5px 10px;
+    background-color: #b535dc;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+    border: none;
+   
+  }
+  
+  .deleteButton:hover {
+    background-color: #217cbd;
+  }

@@ -1,0 +1,24 @@
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+#root {
+  display: flex;
+  justify-content: center;
+  padding-top: 100px;
+  height: 100vh;
+}
+@media (min-width: 500px) {
+  #root {
+    padding-top: 130px;
+  }
+}
+@media (min-width: 1200px) {
+  #root {
+    padding-top: 130px;
+  }
+}
