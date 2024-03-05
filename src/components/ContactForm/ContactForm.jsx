@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import propTypes from 'prop-types';
 import styles from './ContactForm.module.css';
 
-const ContactForm = ({ onAddContact }) => {
+const ContactForm = ({onAddContact}) => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 

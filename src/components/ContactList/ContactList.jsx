@@ -1,29 +1,22 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import ContactItem from 'components/ContactItem/ContactItem';
-import styles from './ContactList.module.css';
+import styles from '../Filter/Filter.module.css';
 
-const ContactList = ({ contacts, onDeleteContact }) => (
-  <ul className={styles.list}>
-    {contacts.map(contact => (
-      <ContactItem
-        key={contact.id}
-        contact={contact}
-        onDeleteContact={onDeleteContact}
-      />
-    ))}
-  </ul>
+const Filter = ({ value, onChange }) => (
+  <div className={styles.filter}>
+    <input
+      type="text"
+      placeholder="Search by name"
+      value={value}
+      onChange={onChange}
+      className={styles.filterInput}
+    />
+  </div>
 );
 
-ContactList.propTypes = {
-  contacts: propTypes.arrayOf(
-    propTypes.shape({
-      id: propTypes.string.isRequired,
-      name: propTypes.string.isRequired,
-      number: propTypes.string.isRequired,
-    })
-  ).isRequired,
-  onDeleteContact: propTypes.func.isRequired,
+Filter.propTypes = {
+  value: propTypes.string.isRequired,
+  onChange: propTypes.func.isRequired,
 };
 
-export default ContactList;
+export default Filter;
