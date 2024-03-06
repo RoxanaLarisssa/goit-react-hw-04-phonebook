@@ -1,107 +1,78 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { nanoid } from 'nanoid';
 import ContactForm from './ContactForm/ContactForm';
 import ContactList from './ContactList/ContactList';
 import Filter from './Filter/Filter';
-import Notiflix from 'notiflix';
-import styles from 'App.module.css';
+import styles from '../App.module.css';
+
+const SAVED_CONTACTS = 'contact';
 
 const App = () => {
-  const [contacts, setContacts] = useState(() => {
-    return (
-      JSON.parse(localStorage.getItem('contact')) ?? [
-        { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-        { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-        { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-        { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-      ]
-    );
-  });
-
+  const [contacts, setContacts] = useState([
+    { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+    { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+    { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+    { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+  ]);
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
-    localStorage.setItem('contact', JSON.stringify(contacts));
+    const data = localStorage.getItem(SAVED_CONTACTS);
+
+    if (data) {
+      setContacts(JSON.parse(data));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(SAVED_CONTACTS, JSON.stringify(contacts));
   }, [contacts]);
 
-  const handleAddContact = (name, number) => {
-    const isContactExist = contacts.some(
-      contact => contact.name.toLowerCase() === name.toLowerCase()
-    );
-
-    if (isContactExist) {
-      Notiflix.Notify.failure(`${name} is already in contacts`);
-      return;
-    }
-
-    const newContact = {
+  const formSubmit = ({ name, number }) => {
+    const contact = {
       id: nanoid(),
       name,
       number,
     };
-
-    setContacts(prevContacts => [...prevContacts, newContact]);
-    Notiflix.Notify.success(`${name} added to contacts`);
-  };
-
-  let timeoutId = null;
-
-  const handleFilterChange = event => {
-    const { value } = event.target;
-    setFilter(value);
-
-    if (timeoutId !== null) {
-      clearTimeout(timeoutId);
-    }
-
-    timeoutId = setTimeout(() => {
-      checkForContact(value);
-    }, 1000);
-  };
-
-  const checkForContact = searchValue => {
-    const searchValueLower = searchValue.toLowerCase();
-
-    const filteredContacts = contacts.filter(
-      contact =>
-        contact.name.toLowerCase().includes(searchValueLower) ||
-        contact.number.includes(searchValue)
-    );
-
-    if (searchValue.trim() === '') {
-      return;
-    }
-
-    if (filteredContacts.length > 0) {
-      Notiflix.Notify.success('Contact is in the list.');
+    if (
+      contacts.some(
+        i =>
+          (i.name.toLowerCase() === contact.name.toLowerCase() &&
+            i.number === contact.number) ||
+          i.number === contact.number
+      )
+    ) {
+      alert(`${name} is already in contacts`);
     } else {
-      Notiflix.Notify.failure('Contact is not in the list.');
+      setContacts(prevContacts => [contact, ...prevContacts]);
     }
   };
 
-  const handleDeleteContact = contactId => {
-    setContacts(prevContacts =>
-      prevContacts.filter(contact => contact.id !== contactId)
-    );
-    Notiflix.Notify.success('Contact deleted successfully');
+  const changeFilterInput = e => {
+    setFilter(e.target.value);
   };
-  const filteredContacts = contacts.filter(
-    contact =>
-      contact.name.toLowerCase().includes(filter.toLowerCase()) ||
-      contact.number.includes(filter)
-  );
+
+  const findContacts = () => {
+    const lowercaseFilter = filter.toLowerCase();
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(lowercaseFilter)
+    );
+  };
+
+  const deleteContact = id => {
+    setContacts(prevContacts =>
+      prevContacts.filter(contact => contact.id !== id)
+    );
+  };
 
   return (
-    <div>
-      <h1 className={styles.title}>Phonebook</h1>
-      <ContactForm onAddContact={handleAddContact} />
+    <section className={styles.mainSection}>
+      <h1>Phonebook</h1>
+      <ContactForm onSubmit={formSubmit} />
       <h2>Contacts</h2>
-      <Filter value={filter} onChange={handleFilterChange} />
-      <ContactList
-        contacts={filteredContacts}
-        onDeleteContact={handleDeleteContact}
-      />
-    </div>
+      <Filter filter={filter} changeFilterInput={changeFilterInput} />
+      <ContactList contacts={findContacts()} deleteContact={deleteContact} />
+    </section>
   );
 };
 

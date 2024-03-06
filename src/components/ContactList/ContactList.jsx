@@ -1,22 +1,32 @@
-import React from 'react';
-import propTypes from 'prop-types';
-import styles from '../Filter/Filter.module.css';
+import PropTypes from 'prop-types';
+import styles from '../ContactList/ContactList.module.css';
 
-const Filter = ({ value, onChange }) => (
-  <div className={styles.filter}>
-    <input
-      type="text"
-      placeholder="Search by name"
-      value={value}
-      onChange={onChange}
-      className={styles.filterInput}
-    />
-  </div>
+const ContactList = ({ contacts, deleteContact }) => (
+  <ul className={styles.contactListSection}>
+    {contacts.map(({ id, name, number }) => {
+      return (
+        <li key={id} className={styles.contactList}>
+          <p>
+            {name}: {number}
+          </p>
+          <button
+            type="button"
+            onClick={() => deleteContact(id)}
+            className={styles.button}
+          >
+            Delete
+          </button>
+        </li>
+      );
+    })}
+  </ul>
 );
 
-Filter.propTypes = {
-  value: propTypes.string.isRequired,
-  onChange: propTypes.func.isRequired,
+ContactList.propTypes = {
+  name: PropTypes.string,
+  number: PropTypes.string,
+  id: PropTypes.string,
+  deleteContact: PropTypes.func,
 };
 
-export default Filter;
+export default ContactList;

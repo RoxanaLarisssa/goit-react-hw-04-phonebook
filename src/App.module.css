@@ -1,4 +1,9 @@
-.title {
-    text-align: center;
-    margin-bottom: 20px;
-  }
+.mainSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
+    'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  background-color: rgb(239, 231, 231);
+}
